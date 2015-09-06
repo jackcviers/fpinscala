@@ -40,7 +40,7 @@ object MyModule {
 
   def fib(n: Int): Int = {
     @tailrec
-    def loop(n:Int, prev:Int, current:Int):Int = n match {
+    def loop(n: Int, prev: Int, current: Int): Int = n match {
       case 0 => prev
       case _ => loop(n - 1, current, current + prev)
     }
@@ -49,7 +49,7 @@ object MyModule {
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = {
-    val msg = "The factorial of %d is %d."
+    val msg = "The absolute value of %d is %d."
     msg.format(n, factorial(n))
   }
 
@@ -57,7 +57,7 @@ object MyModule {
   // accept a _function_ as a parameter
   def formatResult(name: String, n: Int, f: Int => Int) = {
     val msg = "The %s of %d is %d."
-    msg.format(name, n, f(n))
+    msg.format(n, f(n))
   }
 }
 
@@ -116,7 +116,7 @@ object MonomorphicBinarySearch {
       else {
         val mid2 = (low + high) / 2
         val d = ds(mid2) // We index into an array using the same
-                         // syntax as function application
+        // syntax as function application
         if (d == key) mid2
         else if (d > key) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
@@ -131,7 +131,7 @@ object PolymorphicFunctions {
 
   // Here's a polymorphic version of `binarySearch`, parameterized on
   // a function for testing whether an `A` is greater than another `A`.
-  def binarySearch[A](as: Array[A], key: A, gt: (A,A) => Boolean): Int = {
+  def binarySearch[A](as: Array[A], key: A, gt: (A, A) => Boolean): Int = {
     @annotation.tailrec
     def go(low: Int, mid: Int, high: Int): Int = {
       if (low > high) -mid - 1
@@ -160,7 +160,6 @@ object PolymorphicFunctions {
   // that they only have one implementation! Here's an example:
 
   // Exercise 3: Implement `partial1`.
-
   def partial1[A, B, C](a: A, f: (A, B) => C): B => C =
     (b: B) => f(a, b)
 
