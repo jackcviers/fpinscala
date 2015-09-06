@@ -2,7 +2,6 @@ package fpinscala.gettingstarted
 
 import scala.annotation.tailrec
 
-
 // A comment!
 /* Another comment */
 /** A documentation comment */
@@ -24,7 +23,7 @@ object MyModule {
     @annotation.tailrec
     def go(n: Int, acc: Int): Int =
       if (n <= 0) acc
-      else go(n-1, n*acc)
+      else go(n - 1, n * acc)
 
     go(n, 1)
   }
@@ -41,7 +40,7 @@ object MyModule {
 
   def fib(n: Int): Int = {
     @tailrec
-    def loop(n:Int, prev:Int, current:Int):Int = n match {
+    def loop(n: Int, prev: Int, current: Int): Int = n match {
       case 0 => prev
       case _ => loop(n - 1, current, current + prev)
     }
@@ -119,7 +118,7 @@ object MonomorphicBinarySearch {
         val d = ds(mid2) // We index into an array using the same
                          // syntax as function application
         if (d == key) mid2
-        else if (d > key) go(low, mid2, mid2-1)
+        else if (d > key) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
       }
     }
@@ -140,8 +139,8 @@ object PolymorphicFunctions {
         val mid2 = (low + high) / 2
         val a = as(mid2)
         val greater = gt(a, key)
-        if (!greater && !gt(key,a)) mid2
-        else if (greater) go(low, mid2, mid2-1)
+        if (!greater && !gt(key, a)) mid2
+        else if (greater) go(low, mid2, mid2 - 1)
         else go(mid2 + 1, mid2, high)
       }
     }
@@ -150,7 +149,12 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = {
+    def loop(i: Int, prev: A): Boolean  = if(as.length == i) true
+      else if(gt(as(i), prev)) loop(i + 1, as(i))
+      else false
+    if(as.length == 0) true else loop(1, as(0))
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
