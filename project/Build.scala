@@ -5,8 +5,11 @@ object FPInScalaBuild extends Build {
   val opts = Project.defaultSettings ++ Seq(
     scalaVersion := "2.10.4",
     resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
-    libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.1.0"
-  )
+    libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.1.0" withSources(),
+    libraryDependencies += "org.specs2" %% "specs2-core" % "3.6.4" % "test" withSources(),
+    libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.12.4" % "test" withSources(),
+    libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.4" % "test" withSources(),
+    scalacOptions in Test ++= Seq("-Yrangepos"))
 
   lazy val root =
     Project(id = "fpinscala",
