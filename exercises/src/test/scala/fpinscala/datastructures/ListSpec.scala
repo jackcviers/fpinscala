@@ -22,6 +22,14 @@ class ListSpec extends Specification with ScalaCheck {
         })
       }
     }
+    "length" >> {
+      prop{ (a: List[Char]) =>
+        List.length(a) must_== (a match {
+          case Nil => 0
+          case _ => 2
+        })
+      }
+    }
     "setHead" >> {
       prop{ (a:List[Char], b:Char) =>
          (setHead(a)(b) match {
@@ -35,6 +43,13 @@ class ListSpec extends Specification with ScalaCheck {
         }) must_== tail(a)
       }
     }
+    "drop" >> {
+      drop(List(1,2,3), 2) must_== List(3)
+      drop(List(1,2,3), 3) must_== Nil
+      drop(List(1,2,3), 0) must_== List(1,2,3)
+
+    }
+
   }
   def genNil = const(Nil)
   def genList = for{
