@@ -15,13 +15,24 @@ class ListSpec extends Specification with ScalaCheck {
       x must_== 3
     }
     "tail" >> {
-
-
       prop {a: List[Char] =>
         tail(a) == (a match{
           case Cons(x, xs) => xs
           case Nil => Nil
         })
+      }
+    }
+    "setHead" >> {
+      prop{ (a:List[Char], b:Char) =>
+         (setHead(a)(b) match {
+          case Cons(x, _) => x
+          case _ => b.toInt + 1
+        }) must_== b
+      } && prop{ (a: List[Char], b: Char) =>
+        (setHead(a)(b) match {
+          case Cons(_, xs) => xs
+          case _ => Nil
+        }) must_== tail(a)
       }
     }
   }
