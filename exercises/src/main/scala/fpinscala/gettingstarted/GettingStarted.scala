@@ -40,7 +40,7 @@ object MyModule {
 
   def fib(n: Int): Int = {
     @tailrec
-    def loop(n: Int, prev: Int, current: Int): Int = n match {
+    def loop(n:Int, prev:Int, current:Int):Int = n match {
       case 0 => prev
       case _ => loop(n - 1, current, current + prev)
     }
