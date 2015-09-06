@@ -51,7 +51,10 @@ object List { // `List` companion object
     foldRight(l, 1.0)(_ * _)
 
 
-  def tail[A](l: List[A]): List[A] = sys.error("todo")
+  def tail[A](l: List[A]): List[A] = l match {
+    case Cons(x, xs) => xs
+    case _ => Nil
+  }
 
   def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
 
