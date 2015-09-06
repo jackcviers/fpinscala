@@ -1,9 +1,9 @@
 package fpinscala.gettingstarted
 
+import PolymorphicFunctions._
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 import scala.collection.JavaConversions._
-import PolymorphicFunctions._
 
 class GettingStartedSpec extends Specification with ScalaCheck {
 
