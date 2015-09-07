@@ -38,7 +38,40 @@ object Option {
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
-  def variance(xs: Seq[Double]): Option[Double] = sys.error("todo")
+
+  import java.util.regex._
+  
+  def pattern(s: String): Option[Pattern] =
+    try {
+      Some(Pattern.compile(s))
+    } catch {
+      case e: PatternSyntaxException => None
+    }
+
+  def mkMatcher(pat: String): Option[String => Boolean] = 
+    pattern(pat) map (p => (s: String) => p.matcher(s).matches) // The details of this API don't matter too much, but `p.matcher(s).matches` will check if the string `s` matches the pattern `p`.
+
+  def mkMatcher_1(pat: String): Option[String => Boolean] = 
+    for {
+      p <- pattern(pat)
+    } yield ((s: String) => p.matcher(s).matches)
+  
+  def doesMatch(pat: String, s: String): Option[Boolean] = 
+    for {
+      p <- mkMatcher_1(pat)
+    } yield p(s)
+
+  def bothMatch(pat: String, pat2: String, s: String): Option[Boolean] =
+    for {
+      f <- mkMatcher(pat)
+      g <- mkMatcher(pat2)
+    } yield f(s) && g(s)
+
+  def bothMatch_1(pat: String, pat2: String, s: String): Option[Boolean] =
+    mkMatcher(pat) flatMap (f => 
+    mkMatcher(pat2) map     (g => 
+    f(s) && g(s)))
+  def variance(xs: Seq[Double]): Option[Double] = if(xs == Seq.empty) None else mean(xs) flatMap { m => mean(xs map { x => math.pow(x - m, 2) }) }
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = sys.error("todo")
 
