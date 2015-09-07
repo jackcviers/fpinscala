@@ -59,12 +59,35 @@ class ListSpec extends Specification with ScalaCheck {
       }
     }
 
+    "init" >> {
+      init(List(1,2,3)) must_== List(1,2)
+    }
+
+    "filter" >> {
+      def isOdd(i: Int) = i % 2 != 0
+      def neg[A](f: A => Boolean): A => Boolean = !f(_)
+      def loopFilter(xs: List[Int]):List[Int] = xs match {
+        case Cons(x, xs) if isOdd(x) => loopFilter(xs)
+        case Cons(x, xs) => Cons(x, loopFilter(xs))
+        case Nil => Nil
+      }
+
+      prop{ a:List[Int] =>
+        filter(a)(_ % 2 != 0) must_== loopFilter(a)
+      }
+    }
+
   }
   def genNil = const(Nil)
   def genList = for {
     i <- arbitrary[Char]
     b <- arbitrary[Char]
   } yield Cons(i, List(b))
+  def genListInt = for {
+    i <- arbitrary[Int]
+    b <- arbitrary[Int]
+  } yield Cons(i, List(b))
 
   implicit def abList: Arbitrary[List[Char]] = Arbitrary(Gen.oneOf(genNil, genList))
+  implicit def abListInt: Arbitrary[List[Int]] = Arbitrary(Gen.oneOf(genNil, genListInt))
 }

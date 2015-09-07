@@ -72,17 +72,19 @@ object List { // `List` companion object
 
   def setHead[A](l: List[A])(h: A): List[A] = Cons(h, tail(l))
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
-
-  def length[A](l: List[A]): Int = {
-    def loop(as: List[A], count: Int = 0): Int = as match {
-      case Cons(_, xs) => loop(xs, count + 1)
-      case Nil => count
-    }
-    loop(l)
+  def init[A](l: List[A]): List[A] = l match {
+    case Cons(x, Nil) => Nil
+    case Cons(x, xs) => Cons(x, init(xs))
   }
 
-  def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
+  def length[A](l: List[A]): Int = foldLeft(l, 0)((acc, _) => acc + 1)
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] = dropWhile(as) { f }
+
+  def foldLeft[A, B](l: List[A], z: B)(f: (B, A) => B): B = l match {
+    case Nil => z
+    case Cons(h, t) => foldLeft(t, f(z,h))(f)
+  }
 
   def map[A, B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }

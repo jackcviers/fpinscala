@@ -261,8 +261,7 @@ object List { // `List` companion object
   }
   def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = {
     @annotation.tailrec
-    def go[A](l: List[A]): Boolean = l match {
-      case Nil => false
+    def go[A](l: List[A]): Boolean = l match {      case Nil => false
       case Cons(h,t) if startsWith(l, sub) => true
       case Cons(h,t) => go(t)  
     }
