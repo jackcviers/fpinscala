@@ -9,6 +9,12 @@ import org.specs2.mutable.Specification
 import scala.util.Try
 
 class OptionSpec extends Specification with ScalaCheck {
+
+  implicit def arbitraryOptionInt[T](implicit a: Arbitrary[T]): Arbitrary[Option[T]] = Arbitrary {
+    val genMaybe = for { e <- Arbitrary.arbitrary[T] } yield Some(e)
+    val genNone = for { e <- Arbitrary.arbitrary[T] } yield None
+    Gen.oneOf(genMaybe, genNone)
+  }
   "Option." >> {
     "variance" >> {
       def mean(xs: Seq[Double]) = Try((xs sum) / (xs length)).toOption
@@ -19,11 +25,7 @@ class OptionSpec extends Specification with ScalaCheck {
       }
     }
     "map2" >> {
-      implicit def arbitraryOptionInt[T](implicit a: Arbitrary[T]): Arbitrary[Option[T]] = Arbitrary {
-        val genMaybe = for { e <- Arbitrary.arbitrary[T] } yield Some(e)
-        val genNone = for { e <- Arbitrary.arbitrary[T] } yield None
-        Gen.oneOf(genMaybe, genNone)
-      }
+
       prop { (maybeA: Option[Int], maybeB: Option[String], f: (Int, String) => String) =>
         (maybeA == None) ==> {
           map2(maybeA, maybeB)(f) must_== (maybeA match {
@@ -34,6 +36,12 @@ class OptionSpec extends Specification with ScalaCheck {
             case None => None
           })
         }
+      }
+    }
+    "sequence" >> {
+      prop{ (listOfMaybes: List[Option[Int]]) => {
+        sequence(listOfMaybes.filter(_ != None)) must_== Some(listOfMaybes.filter( (maybeA:Option[Int]) => maybeA != None).map { case Some(a) => a; case None => null})
+      }
       }
     }
   }
